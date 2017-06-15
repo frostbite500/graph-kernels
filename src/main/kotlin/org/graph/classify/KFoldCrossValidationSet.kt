@@ -3,12 +3,58 @@ package org.graph.classify
 import org.graph.Graph
 import java.util.*
 
-class KFoldCrossValidationSet(val k: Int, dataSet: MutableList<Any>, labelSet: MutableList<Int>) {
+class KFoldCrossValidationSet(val k: Int, dataSet: MutableList<Any>, labelSet: MutableList<Any>) {
 
-    private var shuffle = 0
+    private var validationSetId = 0
 
+    // Make sure the seed is the same so that the data and labels are identically randomized
     private val data = sliceList(dataSet, Random(1)) as List<List<Graph>>
-    private val labels = sliceList(dataSet, Random(1)) as List<List<Int>>
+    private val labels = sliceList(labelSet, Random(1)) as List<List<Int>>
+
+    private var trainingData = excludeIndex(data, validationSetId) as List<List<Graph>>
+    private var validationData = data[validationSetId]
+    private var trainingLabels = excludeIndex(labels, validationSetId) as List<List<Int>>
+    private var validationLabels = labels[validationSetId]
+
+    fun getTrainingData(): List<Graph> {
+        return trainingData.foldRight(listOf(), {l, acc -> acc + l})
+    }
+
+    fun getValidationData(): List<Graph> {
+        return validationData
+    }
+
+    fun getTrainingLabels(): List<Int> {
+        return trainingLabels.foldRight(listOf(), {l, acc -> acc + l})
+    }
+
+    fun getValidationLabels(): List<Int> {
+        return validationLabels
+    }
+
+    fun nextFold() {
+        if (validationSetId == k) {
+            throw IllegalStateException("All folds have already been visited")
+        }
+        trainingData = excludeIndex(data, validationSetId) as List<List<Graph>>
+        validationData = data[validationSetId]
+        trainingLabels = excludeIndex(labels, validationSetId) as List<List<Int>>
+        validationLabels = labels[validationSetId]
+        validationSetId++
+    }
+
+    private fun excludeIndex(list: List<Any>, index: Int): List<Any> {
+        if (index == 0) {
+            return list.subList(1, list.size)
+        } else if (index == k - 1) {
+            return list.subList(0, list.size - 1)
+        }
+
+        val l1 = list.subList(0, index)
+        val l2 = list.subList(index+1, list.size)
+
+        return l1 + l2
+    }
 
     private fun sliceList(list: MutableList<Any>, seed: Random): List<List<Any>> {
         val out: MutableList<MutableList<Any>> = mutableListOf()
