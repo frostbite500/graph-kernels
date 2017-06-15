@@ -1,4 +1,4 @@
-package org.graph.kernel
+package org.graph.kernels
 
 import org.graph.Graph
 import org.graph.LabeledVertex

@@ -1,4 +1,4 @@
-package org.graph.kernel
+package org.graph.kernels
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix
 import org.graph.Graph

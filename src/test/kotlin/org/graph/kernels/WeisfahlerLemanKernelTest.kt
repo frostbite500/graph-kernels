@@ -1,8 +1,7 @@
-package org.graph.kernel
+package org.graph.kernels
 
 import org.junit.Assert.*
 import org.junit.Test
-import org.graph.kernel.WeisfahlerLemanKernel
 import org.graph.testGraphFrist
 import org.graph.testGraphSecond
 

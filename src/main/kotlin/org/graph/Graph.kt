@@ -10,13 +10,13 @@ data class Graph(val adjList: MutableMap<LabeledVertex, MutableList<VertexAndEdg
         adjList.put(vertex, mutableListOf())
     }
 
-    fun addDirectedEdge(from: LabeledVertex, to: LabeledVertex, label: String) {
+    fun addDirectedEdge(from: LabeledVertex, to: LabeledVertex, label: String = "") {
         if (adjList[from]?.contains(VertexAndEdgeLabel(to, label))?: false)
             throw IllegalArgumentException("An edge with label $label already exists from $from to $to")
         adjList[from]?.add(VertexAndEdgeLabel(to, label))
     }
 
-    fun addUndirectedEdge(from: LabeledVertex, to: LabeledVertex, label: String) {
+    fun addUndirectedEdge(from: LabeledVertex, to: LabeledVertex, label: String = "") {
         if (adjList[from]?.contains(VertexAndEdgeLabel(to, label))?: false)
             throw IllegalArgumentException("An edge with label $label already exists from $from to $to")
         adjList[from]?.add(VertexAndEdgeLabel(to, label))
